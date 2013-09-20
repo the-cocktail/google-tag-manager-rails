@@ -2,7 +2,7 @@ module GoogleTagManager
   PLACEHOLDER_GTM_ID = "GTM-XXXX"
 
   def self.valid_gtm_id?
-     gtm_id.nil? || gtm_id == "" || gtm_id == PLACEHOLDER_GTM_ID ? false : true
+    !(gtm_id.blank? || gtm_id == PLACEHOLDER_GTM_ID || (gtm_id =~ /^GTM-/).nil?)
   end
   def self.gtm_id
     @@gtm_id ||= PLACEHOLDER_GTM_ID
