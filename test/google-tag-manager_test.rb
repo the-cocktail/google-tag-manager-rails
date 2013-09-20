@@ -18,4 +18,11 @@ class GoogleTagManagerTest < ActiveSupport::TestCase
     GoogleTagManager.gtm_id = 'GTM-1234567890'
     assert GoogleTagManager.valid_gtm_id?
   end
+
+  test '.whatever=what should set a DataLayer variable called "whatever" with the value "what"' do
+    GoogleTagManager.my_data_layer_variable = value = %$Hi, I'm the value! :)$
+    assert GoogleTagManager.my_data_layer_variable == value
+    assert GoogleTagManager.to_html =~ /'my_data_layer_variable'/
+    assert GoogleTagManager.to_html =~ /Hi, I\\'m the value! :\)/
+  end
 end

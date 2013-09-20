@@ -30,6 +30,13 @@ In app/views/layouts/application.html.erb:
   ...
 ```
 
+Data Layer Variables
+====
+
+```ruby
+GoogleTagManager.my_data_layer_variable = "Hi, I'm the value! :)"
+```
+
 Per environment config
 ----
 
