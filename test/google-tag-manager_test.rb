@@ -25,4 +25,18 @@ class GoogleTagManagerTest < ActiveSupport::TestCase
     assert GoogleTagManager.to_html =~ /'my_data_layer_variable'/
     assert GoogleTagManager.to_html =~ /Hi, I\\'m the value! :\)/
   end
+
+  test '.data_layer should return a hash representing the current data layer' do
+    assert GoogleTagManager.data_layer.is_a?(Hash)
+  end
+
+  test '.add_to_data_layer should add variables to the current data layer without removing the existing ones' do
+    GoogleTagManager.first_data_layer_variable = 'first'
+    GoogleTagManager.add_to_data_layer \
+      second_data_layer_variable: 'second',
+      third_data_layer_variable: 'third'
+    assert GoogleTagManager.data_layer.keys.include? :first_data_layer_variable
+    assert GoogleTagManager.data_layer.keys.include? :second_data_layer_variable
+    assert GoogleTagManager.data_layer.keys.include? :third_data_layer_variable
+  end
 end

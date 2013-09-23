@@ -30,11 +30,16 @@ In app/views/layouts/application.html.erb:
   ...
 ```
 
+Outputs both the standard container and the Data Layer.
+
 Data Layer Variables
 ====
 
 ```ruby
-GoogleTagManager.my_data_layer_variable = "Hi, I'm the value! :)"
+GoogleTagManager.variable = "1"
+GoogleTagManager.data_layer # => {variable: "1"} (freezed copy)
+GoogleTagManager.add_to_data_layer other_variable: "2", yet_another_variable: "3"
+GoogleTagManager.data_layer # => {variable: "1", other_variable: "2", yet_another_variable: "3"} (freezed copy)
 ```
 
 Per environment config
