@@ -7,5 +7,9 @@ module GoogleTagManager::Rails
 
       GoogleTagManager.to_html.html_safe
     end
+
+    def gtm
+      GoogleTagManager
+    end
   end
 end

@@ -42,6 +42,12 @@ GoogleTagManager.add_to_data_layer other_variable: "2", yet_another_variable: "3
 GoogleTagManager.data_layer # => {variable: "1", other_variable: "2", yet_another_variable: "3"} (freezed copy)
 ```
 
+From the views you can access to the GoogleTagManager class using the ''gtm'' helper:
+
+```ruby
+gtm.variable = '1'
+```
+
 Per environment config
 ----
 
