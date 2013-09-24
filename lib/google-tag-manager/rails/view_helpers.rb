@@ -4,9 +4,9 @@ module GoogleTagManager::Rails
   module ViewHelpers
     def google_tag_manager
       ''.tap do |snippet|
-        snippet = GoogleTagManager.to_html.html_safe if GoogleTagManager.valid_gtm_id?
+        snippet.concat(GoogleTagManager.to_html) if GoogleTagManager.valid_gtm_id?
         GoogleTagManager.reset_data_layer!
-      end
+      end.html_safe
     end
 
     def gtm
