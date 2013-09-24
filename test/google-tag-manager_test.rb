@@ -39,4 +39,8 @@ class GoogleTagManagerTest < ActiveSupport::TestCase
     assert GoogleTagManager.data_layer.keys.include? :second_data_layer_variable
     assert GoogleTagManager.data_layer.keys.include? :third_data_layer_variable
   end
+
+  test '.whatever should return nil instead or "method missing" if "whatever" has not been set (aka ||= support)' do
+    assert GoogleTagManager.i_should_return_nil.nil?
+  end
 end

@@ -36,10 +36,15 @@ Data Layer Variables
 ====
 
 ```ruby
-GoogleTagManager.variable = "1"
-GoogleTagManager.data_layer # => {variable: "1"} (freezed copy)
-GoogleTagManager.add_to_data_layer other_variable: "2", yet_another_variable: "3"
-GoogleTagManager.data_layer # => {variable: "1", other_variable: "2", yet_another_variable: "3"} (freezed copy)
+GoogleTagManager.variable = '1'
+GoogleTagManager.data_layer          # => {variable: "1"} (freezed copy)
+GoogleTagManager.add_to_data_layer \
+  other_variable: "5",
+  yet_another_variable: "9"
+GoogleTagManager.data_layer          # => {variable: "1", other_variable: "5", yet_another_variable: "9"} (freezed copy)
+GoogleTagManager.variable  ||= '2'   # ignored, cause "variable" already has a value
+GoogleTagManager.variable2 ||= '2'   # set, cause "variable2" hasn't been set
+GoogleTagManager.data_layer          #=> {variable: "1", variable2: "2", other_variable: "5", yet_another_variable: "9"}
 ```
 
 From the views you can access to the GoogleTagManager class using the ''gtm'' helper:

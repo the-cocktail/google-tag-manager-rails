@@ -31,8 +31,6 @@ module GoogleTagManager
             data_layer_hash[new_variable]
           end
         end
-      else
-        super
       end
     end
 
