@@ -21,7 +21,6 @@ module GoogleTagManager
       "<!-- End Google Tag Manager -->"
     end
 
-
     def method_missing(name, *args)
       if args.size == 1 and name =~ /^(.+)=/
         new_variable = $1.to_sym
@@ -41,6 +40,10 @@ module GoogleTagManager
     def add_to_data_layer hash
       raise 'GoogleTagManager error: hash required in order to add variables to the Data Layer' unless hash.is_a?(Hash)
       data_layer_hash.merge! hash
+    end
+
+    def reset_data_layer!
+      @@data_layer_hash = {} if @@data_layer_hash
     end
 
     private
