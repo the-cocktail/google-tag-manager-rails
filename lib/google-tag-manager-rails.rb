@@ -1,5 +1,6 @@
 module GoogleTagManager
   PLACEHOLDER_GTM_ID = "GTM-XXXX"
+  PLACEHOLDER_GTM_EVENTS_DATA_PREFIX = "gtm"
 
   class << self
     def valid_gtm_id?
@@ -13,7 +14,15 @@ module GoogleTagManager
     def gtm_id=(gtm_id)
       @@gtm_id = gtm_id
     end
-  
+    
+    def events_data_prefix
+      @@events_data_prefix ||= PLACEHOLDER_GTM_EVENTS_DATA_PREFIX
+    end
+
+    def events_data_prefix=(prefix)
+      @@events_data_prefix = prefix
+    end
+
     def to_html
       "<!-- Google Tag Manager -->\n" +
       data_layer_tag + "\n" +
