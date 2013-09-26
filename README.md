@@ -102,3 +102,11 @@ Then in your HTML you define an event like this:
 <a href="/wadus" data-google-tag-manager-event="wadusClicked">Wadus</a>
 ```
 
+Debugging Events
+----------------
+
+If you add the following line in our config/environments/development.rb every dataLayer.push will be showed in the console:
+
+```ruby
+GoogleTagManager.debug_mode = true
+```

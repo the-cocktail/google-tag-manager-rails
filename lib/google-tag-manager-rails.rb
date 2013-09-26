@@ -15,6 +15,14 @@ module GoogleTagManager
       @@gtm_id = gtm_id
     end
     
+    def debug_mode=(value)
+      @@debug_mode = value
+    end
+
+    def debug_mode
+      @@debug_mode || false
+    end
+    
     def events_data_prefix
       @@events_data_prefix ||= PLACEHOLDER_GTM_EVENTS_DATA_PREFIX
     end
