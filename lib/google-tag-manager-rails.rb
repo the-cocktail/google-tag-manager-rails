@@ -76,10 +76,10 @@ module GoogleTagManager
       def serialize data
         if data.is_a? Hash
           # If this is a hash we serialze it in hash syntax: {key1: value1, key2:value2...}
-          "{#{data.map do |key, value|
+          "{\n  #{data.map do |key, value|
               "'#{key}': #{serialize(value)}"
-            end.join(",")
-            } }"
+            end.join(",\n  ")
+            }\n}"
         elsif data.is_a? Array
           # If it's an array we just join the elements serialized: [element1, element2, element3...]
           "[#{data.map{|d| serialize(d)}.join(',')}]"
