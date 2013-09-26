@@ -21,7 +21,7 @@ module GoogleTagManager::Rails
 /* <![CDATA[ */
 (function($,document,window,undefined){
 $(document).ready(function() {
-  $.each($('a[data-#{prefix}-event]'), function(i, link){
+  $.each($('[data-#{prefix}-event]'), function(i, link){
     $(link).on('click', function() {
       var push_hash = {};
       $.each($(this).data(), function(key, value){
