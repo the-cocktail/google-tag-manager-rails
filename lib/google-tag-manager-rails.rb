@@ -23,7 +23,7 @@ module GoogleTagManager
       @@debug_mode || false
     end
 
-    def live_events = value
+    def live_events= value
       @@debug_mode = value
     end
 
