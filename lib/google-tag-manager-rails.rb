@@ -10,7 +10,6 @@ module GoogleTagManager
     def gtm_id
       @@gtm_id ||= PLACEHOLDER_GTM_ID
     end
-
     def gtm_id=(gtm_id)
       @@gtm_id = gtm_id
     end
@@ -18,17 +17,15 @@ module GoogleTagManager
     def debug_mode=(value)
       @@debug_mode = value
     end
-
-    def debug_mode
-      @@debug_mode || false
+    def debug_mode?
+      @@debug_mode ||= false
     end
 
     def live_events= value
-      @@debug_mode = value
+      @@live_events = value
     end
-
     def live_events?
-      @@live_events || false
+      @@live_events ||= false
     end
     
     def events_data_prefix

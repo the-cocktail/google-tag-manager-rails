@@ -29,9 +29,9 @@ $(document).ready(function() {
         push_hash[gtm_key] = value;
       };
     });
-    #{%!console.log('[GoogleTagManager] dataLayer.push({');! if GoogleTagManager.debug_mode }
-    #{%!$.each(push_hash, function(k,v){ console.log("[GoogleTagManager]   '" + k + "': '" + v + "'")});! if GoogleTagManager.debug_mode }
-    #{%!console.log('[GoogleTagManager] });');! if GoogleTagManager.debug_mode }
+    #{%!console.log('[GoogleTagManager] dataLayer.push({');! if GoogleTagManager.debug_mode? }
+    #{%!$.each(push_hash, function(k,v){ console.log("[GoogleTagManager]   '" + k + "': '" + v + "'")});! if GoogleTagManager.debug_mode? }
+    #{%!console.log('[GoogleTagManager] });');! if GoogleTagManager.debug_mode? }
     dataLayer.push(push_hash);
   });
 });
