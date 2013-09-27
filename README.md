@@ -110,3 +110,12 @@ If you add the following line in our config/environments/development.rb every da
 ```ruby
 GoogleTagManager.debug_mode = true
 ```
+
+"Live" Events
+-------------
+
+If you load dinamic contents with GTM events markup you will have to add this line to your config in order to have them pushed:
+
+```ruby
+GoogleTagManager.live_events = true
+```

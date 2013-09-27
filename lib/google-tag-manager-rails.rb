@@ -22,6 +22,14 @@ module GoogleTagManager
     def debug_mode
       @@debug_mode || false
     end
+
+    def live_events = value
+      @@debug_mode = value
+    end
+
+    def live_events?
+      @@live_events || false
+    end
     
     def events_data_prefix
       @@events_data_prefix ||= PLACEHOLDER_GTM_EVENTS_DATA_PREFIX

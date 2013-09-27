@@ -21,20 +21,18 @@ module GoogleTagManager::Rails
 /* <![CDATA[ */
 (function($,document,window,undefined){
 $(document).ready(function() {
-  $.each($('[data-#{prefix}-event]'), function(i, link){
-    $(link).on('click', function() {
-      var push_hash = {};
-      $.each($(this).data(), function(key, value){
-        if(key.substring(0, #{prefix_size}) == '#{prefix}') {
-          var gtm_key = key.substring(#{prefix_size}, #{prefix_size + 1}).toLowerCase() + key.substring(#{prefix_size + 1}); 
-          push_hash[gtm_key] = value;
-        };
-      });
-      #{%!console.log('[GoogleTagManager] dataLayer.push({');! if GoogleTagManager.debug_mode }
-      #{%!$.each(push_hash, function(k,v){ console.log("[GoogleTagManager]   '" + k + "': '" + v + "'")});! if GoogleTagManager.debug_mode }
-      #{%!console.log('[GoogleTagManager] });');! if GoogleTagManager.debug_mode }
-      dataLayer.push(push_hash);
+  #{(GoogleTagManager.live_events? ? "$('body').on('click','[data-#{prefix}-event]'" : "$('[data-#{prefix}-event]').on('click'")}, function() {
+    var push_hash = {};
+    $.each($(this).data(), function(key, value){
+      if(key.substring(0, #{prefix_size}) == '#{prefix}') {
+        var gtm_key = key.substring(#{prefix_size}, #{prefix_size + 1}).toLowerCase() + key.substring(#{prefix_size + 1}); 
+        push_hash[gtm_key] = value;
+      };
     });
+    #{%!console.log('[GoogleTagManager] dataLayer.push({');! if GoogleTagManager.debug_mode }
+    #{%!$.each(push_hash, function(k,v){ console.log("[GoogleTagManager]   '" + k + "': '" + v + "'")});! if GoogleTagManager.debug_mode }
+    #{%!console.log('[GoogleTagManager] });');! if GoogleTagManager.debug_mode }
+    dataLayer.push(push_hash);
   });
 });
 })(jQuery,document,window)
