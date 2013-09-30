@@ -74,7 +74,7 @@ In order to send events you need jQuery and call the following helper after its 
 </body>
 ```
 
-In addition you have to add the **data-gtm-event** attribute to the "clickable" elements that shoud fire events. For example:
+In addition you have to add the **data-gtm-event** attribute to the elements that should fire events when clicked (links, selects...) or changed (checkboxes, radio buttons...). For example:
 
 ```html
 <a href="/wadus" data-gtm-event="wadusClicked">Wadus</a>

@@ -21,7 +21,7 @@ module GoogleTagManager::Rails
 /* <![CDATA[ */
 (function($,document,window,undefined){
 $(document).ready(function() {
-  #{(GoogleTagManager.live_events? ? "$('body').on('click','[data-#{prefix}-event]'" : "$('[data-#{prefix}-event]').on('click'")}, function() {
+  #{(GoogleTagManager.live_events? ? "$('body').on('click change','[data-#{prefix}-event]'" : "$('[data-#{prefix}-event]').on('click change'")}, function() {
     var push_hash = {};
     $.each($(this).data(), function(key, value){
       if(key.substring(0, #{prefix_size}) == '#{prefix}') {
