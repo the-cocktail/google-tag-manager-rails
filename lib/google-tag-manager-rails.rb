@@ -43,6 +43,32 @@ module GoogleTagManager
       "<!-- End Google Tag Manager -->"
     end
 
+    def events_to_html
+      prefix_size = events_data_prefix.length
+      <<-GTM_EVENTS.html_safe
+<script type="text/javascript">
+/* <![CDATA[ */
+(function($,document,window,undefined){
+$(document).ready(function() {
+  #{events_bind_statement}
+    var push_hash = {};
+    $.each($(this).data(), function(key, value){
+      if(key.substring(0, #{prefix_size}) == '#{events_data_prefix}') {
+        var gtm_key = key.substring(#{prefix_size}, #{prefix_size + 1}).toLowerCase() + key.substring(#{prefix_size + 1}); 
+        push_hash[gtm_key] = value;
+      };
+    });
+#{log_push_variables if debug_mode?}
+    dataLayer.push(push_hash);
+  });
+});
+})(jQuery,document,window)
+/* ]]> */
+</script>
+      GTM_EVENTS
+    end
+
+
     def method_missing(name, *args)
       if args.size == 1 and name =~ /^(.+)=/
         new_variable = $1.to_sym
@@ -100,6 +126,26 @@ module GoogleTagManager
 <noscript><iframe src="//www.googletagmanager.com/ns.html?id=#{gtm_id}" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','#{gtm_id}');</script>
         HTML
+      end
+
+      def pushed_events
+        'click change'
+      end
+
+      def events_bind_statement
+        if live_events?
+          "$('body').on('#{pushed_events}','[data-#{events_data_prefix}-event]', function() {"
+        else
+          "$('[data-#{events_data_prefix}-event]').on('#{pushed_events}', function() {"
+        end
+      end
+
+      def log_push_variables
+        <<-LOG_PUSH_VARIABLES
+        console.log('[GoogleTagManager] dataLayer.push({');
+        $.each(push_hash, function(k,v){ console.log("[GoogleTagManager]   '" + k + "': '" + v + "'")});
+        console.log('[GoogleTagManager] });');
+        LOG_PUSH_VARIABLES
       end
   end
 
