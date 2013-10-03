@@ -100,7 +100,7 @@ That will push **'wadusVariable': '3'** to the Data Layer along with the event (
 Pushing with custom JavaScript events
 -------------------------------------
 
-If within your JS code you stop the event propagation needed to push a GTM event, you can trigger a custom JS event that will be listened by google-tag-manager-rails as an alternative to the standard event.
+If within your JS code **you stop the event propagation** needed to push a GTM event, you can trigger a **custom JS event** that will be listened by google-tag-manager-rails as an alternative to the standard event.
 
 There're three types of custom events:
 
@@ -110,7 +110,9 @@ There're three types of custom events:
 
 For example, if you're managing a submit form with Ajax stoping the submit event propagation and you trigger the "ajax_form_submitted" event when the form is submitted, you should config google-tag-manager-rails like this:
 
+```ruby
 GoogleTagManager.custom_submit_events = 'ajax_form_submitted'
+```
 
 Event data attributes prefix
 ----------------------------
