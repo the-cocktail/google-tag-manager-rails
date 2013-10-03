@@ -74,13 +74,22 @@ In order to send events you need jQuery and call the following helper after its 
 </body>
 ```
 
-In addition you have to add the **data-gtm-event** attribute to the elements that should fire events when clicked (links, selects...) or changed (checkboxes, radio buttons...). For example:
+In addition you have to add the **data-gtm-event** attribute to the elements that should fire events when:
+
+* **submitted** (on submit event) when used in **form** tags,
+* **changed** (on change event) when used in **select** tags,
+* **clicked** (on click event) when used in **any other** tag.
 
 ```html
 <a href="/wadus" data-gtm-event="wadusClicked">Wadus</a>
 ```
 
-Previous code will push **'event': 'wadusClicked'**. If you want to send a dinamic data layer variable along with the event, add a data attribute with the "gtm-" prefix followed by the variable name. For example:
+Previous code will push **'event': 'wadusClicked'** when the link is clicked.
+
+Event variables
+---------------
+
+If you want to send a dinamic data layer variable along with the event, add a data attribute with the "gtm-" prefix followed by the variable name. For example:
 
 ```html
 <a href="/wadus" data-gtm-event="wadusClicked" data-gtm-wadus-variable="3">Wadus</a>
@@ -88,7 +97,25 @@ Previous code will push **'event': 'wadusClicked'**. If you want to send a dinam
 
 That will push **'wadusVariable': '3'** to the Data Layer along with the event (notice that variable names will be "lowerCamelized").
 
-If you don't like **gtm** as prefix for your data attributes you can set another one. For example, if you configure it like this:
+Pushing with custom JavaScript events
+-------------------------------------
+
+If within your JS code you stop the event propagation needed to push a GTM event, you can trigger a custom JS event that will be listened by google-tag-manager-rails as an alternative to the standard event.
+
+There're three types of custom events:
+
+* alternatives for the "click" event (set with .custom_click_events=),
+* alternatives for the "change" event (set with .custom_change_events=),
+* alternatives for the "submit" event (set with .custom_submit_events=).
+
+For example, if you're managing a submit form with Ajax stoping the submit event propagation and you trigger the "ajax_form_submitted" event when the form is submitted, you should config google-tag-manager-rails like this:
+
+GoogleTagManager.custom_submit_events = 'ajax_form_submitted'
+
+Event data attributes prefix
+----------------------------
+
+If you don't like data-**gtm** as prefix for your data attributes you can set another one. For example, if you configure it like this:
 
 ```ruby
 GoogleTagManager.gtm_id = "GTM-XXXX"
@@ -96,7 +123,6 @@ GoogleTagManager.events_data_prefix = "google-tag-manager"
 ```
 
 Then in your HTML you define an event like this:
-
 
 ```html
 <a href="/wadus" data-google-tag-manager-event="wadusClicked">Wadus</a>

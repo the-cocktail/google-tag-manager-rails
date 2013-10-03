@@ -36,6 +36,30 @@ module GoogleTagManager
       @@events_data_prefix = prefix
     end
 
+    def custom_click_events=(value)
+      @@custom_click_events ||= value
+    end
+    
+    def custom_click_events
+      @@custom_click_events ||= ''
+    end
+    
+    def custom_submit_events=(value)
+      @@custom_submit_events ||= value
+    end
+
+    def custom_submit_events
+      @@custom_submit_events ||= ''
+    end
+
+    def custom_change_events=(value)
+      @@custom_change_events ||= value
+    end
+
+    def custom_change_events
+      @@custom_change_events ||= ''
+    end
+
     def to_html
       "<!-- Google Tag Manager -->\n" +
       data_layer_tag + "\n" +
@@ -49,20 +73,34 @@ module GoogleTagManager
 <script type="text/javascript">
 /* <![CDATA[ */
 (function($,document,window,undefined){
-$(document).ready(function() {
-  #{events_bind_statement}
-    var push_hash = {};
-    $.each($(this).data(), function(key, value){
-      if(key.substring(0, #{prefix_size}) == '#{events_data_prefix}') {
-        var gtm_key = key.substring(#{prefix_size}, #{prefix_size + 1}).toLowerCase() + key.substring(#{prefix_size + 1}); 
-        push_hash[gtm_key] = value;
-      };
-    });
-#{log_push_variables if debug_mode?}
-    dataLayer.push(push_hash);
-  });
-});
-})(jQuery,document,window)
+
+  var GoogleTagManagerRails = {
+    bind_events: function() {
+      $(#{clicks_bind_statement} GoogleTagManagerRails.push_event_for_tag);
+      $(#{submits_bind_statement} GoogleTagManagerRails.push_event_for_tag);
+      $(#{changes_bind_statement} GoogleTagManagerRails.push_event_for_tag);
+    },
+    
+    push_event_for_tag: function() {
+      var push_hash = GoogleTagManagerRails.tag_push_hash(this);
+      #{log_push_variables if debug_mode?}
+      dataLayer.push(push_hash);
+    },
+    tag_push_hash: function(tag) {
+      var push_hash = {};
+      $.each($(tag).data(), function(key, value){
+        if(key.substring(0, #{prefix_size}) == '#{events_data_prefix}') {
+          var gtm_key = key.substring(#{prefix_size}, #{prefix_size + 1}).toLowerCase() + key.substring(#{prefix_size + 1}); 
+          push_hash[gtm_key] = value;
+        };
+      });
+      return(push_hash);
+    }
+  };
+  
+  $(document).ready(GoogleTagManagerRails.bind_events);
+
+  })(jQuery,document,window)
 /* ]]> */
 </script>
       GTM_EVENTS
@@ -128,15 +166,33 @@ $(document).ready(function() {
         HTML
       end
 
-      def pushed_events
-        'click change'
+      def elements_selector(options={})
+        prefix = options[:prefix] || ''
+        suffix = options[:suffix] || ''
+        "#{prefix}[data-#{events_data_prefix}-event]#{suffix}"
       end
 
-      def events_bind_statement
+      def clicks_bind_statement
+        bind_statement :click, elements_selector(suffix: ':not(form, select)')
+      end
+
+      def submits_bind_statement
+        bind_statement :submit, elements_selector(prefix: 'form')
+      end
+
+      def changes_bind_statement
+        bind_statement :change, elements_selector(prefix: 'select')
+      end
+
+      def events_for(event_type)
+        "#{event_type} #{send("custom_#{event_type}_events")}".strip
+      end
+
+      def bind_statement(event_type, selector)
         if live_events?
-          "$('body').on('#{pushed_events}','[data-#{events_data_prefix}-event]', function() {"
+          "'body').on('#{events_for(event_type)}','#{selector}',"
         else
-          "$('[data-#{events_data_prefix}-event]').on('#{pushed_events}', function() {"
+          "'#{selector}').on('#{events_for(event_type)}',"
         end
       end
 
