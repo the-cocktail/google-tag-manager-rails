@@ -198,9 +198,9 @@ module GoogleTagManager
 
       def log_push_variables
         <<-LOG_PUSH_VARIABLES
-        console.log('[GoogleTagManager] dataLayer.push({');
+        window.console && console.log('[GoogleTagManager] dataLayer.push({');
         $.each(push_hash, function(k,v){ console.log("[GoogleTagManager]   '" + k + "': '" + v + "'")});
-        console.log('[GoogleTagManager] });');
+        window.console && console.log('[GoogleTagManager] });');
         LOG_PUSH_VARIABLES
       end
   end
