@@ -88,11 +88,13 @@ module GoogleTagManager
     },
 
     push_event_for_tag: function() {
+
       var push_hash = GoogleTagManagerRails.tag_push_hash(this);
       #{log_push_variables if debug_mode?}
       dataLayer.push(push_hash);
     },
     tag_push_hash: function(tag) {
+
       var push_hash = {};
       $.each($(tag).data(), function(key, value){
         if(key.substring(0, #{prefix_size}) == '#{events_data_prefix}') {
@@ -117,6 +119,11 @@ module GoogleTagManager
           });
 
           $.extend(true, push_hash, nested_object);
+          if(tag.href != undefined) {
+            $.extend(true, push_hash, {'eventCallback': function() {
+                document.location = tag.href;
+            }})
+          }
         };
       });
       return(push_hash);
