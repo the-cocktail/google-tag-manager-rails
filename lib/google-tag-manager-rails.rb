@@ -2,6 +2,7 @@ module GoogleTagManager
   PLACEHOLDER_GTM_ID = "GTM-XXXX"
   PLACEHOLDER_GTM_EVENTS_DATA_PREFIX = "gtm"
   PLACEHOLDER_ECOMMERCE_EVENTS_DATA_PREFIX = "ecgtm"
+  PLACEHOLDER_MULTI_ELEMENT = "multi"
 
   class << self
     def valid_gtm_id?
@@ -39,6 +40,10 @@ module GoogleTagManager
 
     def events_data_prefix=(prefix)
       @@events_data_prefix = prefix
+    end
+
+    def multi_element
+      @@multi_element ||= PLACEHOLDER_MULTI_ELEMENT
     end
 
     def custom_click_events=(value)
@@ -106,15 +111,28 @@ module GoogleTagManager
 
           $.each(gtm_key.split(/(?=[A-Z])/).reverse(), function(index, element){
             //preprocess compound names
-            compound_name = $.map(element.split("_"),function(val,i) {return val.substring(0,1).toUpperCase()+val.substring(1)}).join("")
+            var convert_to_array = false;
+            splitted_element = element.split("_");
+            if(splitted_element[splitted_element.length-1] == '#{multi_element}') {
+              convert_to_array = true;
+              splitted_element.pop();
+            }
+            compound_name = $.map(splitted_element,function(val,i) {return val.substring(0,1).toUpperCase()+val.substring(1)}).join("")
 
             el = compound_name.substring(0,1).toLowerCase()+compound_name.substring(1)
             if(index == 0) {
               nested_object[el] = value
             } else {
               previous = nested_object
-              nested_object = {}
-              nested_object[el] = previous
+              if(convert_to_array){
+                nested_object = {}
+                nested_object[el] = [previous]
+              }else{
+                nested_object = {}
+                nested_object[el] = previous
+              }
+
+
             }
           });
 
