@@ -128,7 +128,20 @@ module GoogleTagManager
       if overwrite
         data_layer_hash.merge! hash, &block
       else
-        @@data_layer_hash = data_layer_hash.deep_merge hash, &block
+        @@data_layer_hash = data_layer_hash.deep_merge hash do |key, old_value, new_value|
+          # on non-overwrite mode, if we are given a block, then we use it
+          if block_given?
+            block.call(key, old_value, new_value)
+          else
+            # If we are not given a block and both values are arrays we concat them
+            if old_value.is_a?(Array)  && new_value.is_a?(Array)
+              (old_value + new_value).uniq
+            # If they are not arrays we return the new one
+            else
+              new_value
+            end
+          end
+        end
       end
 
     end
