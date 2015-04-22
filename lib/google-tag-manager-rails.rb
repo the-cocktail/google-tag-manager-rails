@@ -123,9 +123,14 @@ module GoogleTagManager
       data_layer_hash.dup.freeze
     end
 
-    def add_to_data_layer hash
+    def add_to_data_layer hash, overwrite = true
       raise 'GoogleTagManager error: hash required in order to add variables to the Data Layer' unless hash.is_a?(Hash)
-      data_layer_hash.merge! hash
+      if overwrite
+        data_layer_hash.merge! hash
+      else
+        @@data_layer_hash = data_layer_hash.deep_merge hash
+      end
+
     end
 
     def reset_data_layer!
