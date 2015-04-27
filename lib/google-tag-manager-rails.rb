@@ -64,6 +64,7 @@ module GoogleTagManager
       "<!-- Google Tag Manager -->\n" +
       data_layer_tag + "\n" +
       container_tag + "\n" +
+      data_layer_pushes_tag + "\n" +
       "<!-- End Google Tag Manager -->"
     end
 
@@ -123,6 +124,11 @@ module GoogleTagManager
       data_layer_hash.dup.freeze
     end
 
+    def add_to_data_layer_pushes hash
+      data_layer_pushes << hash
+    end
+
+
     def add_to_data_layer hash, overwrite = true, &block
       raise 'GoogleTagManager error: hash required in order to add variables to the Data Layer' unless hash.is_a?(Hash)
       if overwrite
@@ -155,10 +161,18 @@ module GoogleTagManager
         @@data_layer_hash ||= {}
       end
 
+      def data_layer_pushes
+        @@data_layer_pushes ||= []
+      end
+
       def data_layer_tag
         "<script>dataLayer = [#{serialize data_layer_hash}]</script>"
       end
-      
+
+      def data_layer_pushes_tag
+        "<script>#{data_layer_pushes.map{|dl_hash| "dataLayer.push(#{serialize dl_hash});"}.join("\n")}</script>"
+      end
+
       # This helper serialize data into array and hahes in JS
       def serialize data
         if data.is_a? Hash
