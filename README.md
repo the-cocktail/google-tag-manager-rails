@@ -4,7 +4,7 @@ Installation
 Add the following to your Gemfile:
 
 ``
-  gem 'google-tag-manager-rails'
+  gem 'google-tag-manager-rails', github: 'the-cocktail/google-tag-manager-rails'
 ``
 
 Then run:
