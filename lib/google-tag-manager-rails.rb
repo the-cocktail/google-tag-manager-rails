@@ -10,13 +10,15 @@ module GoogleTagManager
     def gtm_id
       @@gtm_id ||= PLACEHOLDER_GTM_ID
     end
+
     def gtm_id=(gtm_id)
       @@gtm_id = gtm_id
     end
-    
+
     def debug_mode=(value)
       @@debug_mode = value
     end
+
     def debug_mode?
       @@debug_mode ||= false
     end
@@ -24,10 +26,11 @@ module GoogleTagManager
     def live_events= value
       @@live_events = value
     end
+
     def live_events?
       @@live_events ||= false
     end
-    
+
     def events_data_prefix
       @@events_data_prefix ||= PLACEHOLDER_GTM_EVENTS_DATA_PREFIX
     end
@@ -39,11 +42,11 @@ module GoogleTagManager
     def custom_click_events=(value)
       @@custom_click_events ||= value
     end
-    
+
     def custom_click_events
       @@custom_click_events ||= ''
     end
-    
+
     def custom_submit_events=(value)
       @@custom_submit_events ||= value
     end
@@ -80,7 +83,7 @@ module GoogleTagManager
       $(#{submits_bind_statement} GoogleTagManagerRails.push_event_for_tag);
       $(#{changes_bind_statement} GoogleTagManagerRails.push_event_for_tag);
     },
-    
+
     push_event_for_tag: function() {
       var push_hash = GoogleTagManagerRails.tag_push_hash(this);
       #{log_push_variables if debug_mode?}
@@ -90,14 +93,14 @@ module GoogleTagManager
       var push_hash = {};
       $.each($(tag).data(), function(key, value){
         if(key.substring(0, #{prefix_size}) == '#{events_data_prefix}') {
-          var gtm_key = key.substring(#{prefix_size}, #{prefix_size + 1}).toLowerCase() + key.substring(#{prefix_size + 1}); 
+          var gtm_key = key.substring(#{prefix_size}, #{prefix_size + 1}).toLowerCase() + key.substring(#{prefix_size + 1});
           push_hash[gtm_key] = value;
         };
       });
       return(push_hash);
     }
   };
-  
+
   $(document).ready(GoogleTagManagerRails.bind_events);
 
   })(jQuery,document,window)
@@ -158,7 +161,7 @@ module GoogleTagManager
       def data_layer_tag
         "<script>dataLayer = [#{serialize data_layer_hash}]</script>"
       end
-      
+
       # This helper serialize data into array and hahes in JS
       def serialize data
         if data.is_a? Hash
@@ -174,7 +177,7 @@ module GoogleTagManager
           # And if it's a simple element, we turn it into a string
           "'#{data.to_s.gsub(/'/){|match| "\\'"}}'"
         end
-    
+
       end
 
       def container_tag
