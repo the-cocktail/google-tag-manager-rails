@@ -43,7 +43,7 @@ class GoogleTagManagerTest < ActiveSupport::TestCase
   test '.whatever should return nil instead or "method missing" if "whatever" has not been set (aka ||= support)' do
     assert GoogleTagManager.i_should_return_nil.nil?
   end
-  
+
   test '.reset_data_layer! should remove al Data Layer variable so it GTM is clean for the next request' do
     GoogleTagManager.variable = '1'
     GoogleTagManager.reset_data_layer!
